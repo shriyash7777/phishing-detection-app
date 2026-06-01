@@ -12,9 +12,7 @@
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// ══════════════════════════════════════════
-// DETECTION ENGINE
-// ══════════════════════════════════════════
+
 function extractFeatures(url) {
   let parsed;
   try {
@@ -84,9 +82,7 @@ function getVerdict(score) {
   return               { verdict:'LEGITIMATE',  emoji:'✅', risk:'LOW RISK',   cssClass:'legitimate' };
 }
 
-// ══════════════════════════════════════════
-// FIREBASE OPERATIONS
-// ══════════════════════════════════════════
+
 async function saveScan(url, verdict, score, reasons) {
   try {
     await db.collection('scans').add({
@@ -114,9 +110,6 @@ async function loadStats() {
   } catch(e) { console.warn('Stats failed:', e); }
 }
 
-// ══════════════════════════════════════════
-// UI FUNCTIONS
-// ══════════════════════════════════════════
 function showLoader(show) {
   document.getElementById('loader').style.display    = show ? 'block' : 'none';
   document.getElementById('resultBox').style.display = 'none';
@@ -177,9 +170,7 @@ function addToHistory(url, v, score) {
   badge.textContent = parseInt(badge.textContent || '0') + 1;
 }
 
-// ══════════════════════════════════════════
-// MAIN FUNCTION
-// ══════════════════════════════════════════
+
 async function analyzeURL() {
   const input = document.getElementById('urlInput');
   const url   = input.value.trim();

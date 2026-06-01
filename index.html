@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Phishing Detector | HACKADEMIC</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+</head>
+<body>
+
+  <header>
+    <div class="header-content">
+      <div class="logo">
+        <i class="fas fa-shield-alt"></i>
+        <span>PhishGuard AI</span>
+      </div>
+      <p class="subtitle">AI-Based Phishing Detection & Awareness System</p>
+      </p>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- Scanner Card -->
+    <div class="card scanner-card">
+      <h2><i class="fas fa-search"></i> URL Scanner</h2>
+      <p class="card-desc">Enter any URL to check if it is a phishing site</p>
+
+      <div class="input-group">
+        <i class="fas fa-link input-icon"></i>
+        <input type="text" id="urlInput" placeholder="https://example.com" autocomplete="off"/>
+        <button id="scanBtn" onclick="analyzeURL()">
+          <i class="fas fa-search"></i> Scan URL
+        </button>
+      </div>
+
+      <div class="quick-tests">
+        <span class="qt-label">Quick Test:</span>
+        <button class="qt-btn safe" onclick="quickTest('https://www.google.com')">✅ Safe URL</button>
+        <button class="qt-btn phish" onclick="quickTest('http://paypal-verify.evil.com/login')">🚨 Phishing URL</button>
+        <button class="qt-btn suspicious" onclick="quickTest('http://bit.ly/secure-login-now')">⚠️ Suspicious URL</button>
+      </div>
+
+      <div class="loader" id="loader">
+        <div class="spinner"></div>
+        <p>Analyzing URL...</p>
+      </div>
+
+      <div class="result-box" id="resultBox" style="display:none">
+        <div class="result-header" id="resultHeader">
+          <span class="result-icon" id="resultIcon"></span>
+          <span class="result-verdict" id="resultVerdict"></span>
+        </div>
+        <div class="result-details">
+          <div class="result-url" id="resultUrl"></div>
+          <div class="score-bar-container">
+            <div class="score-label">Risk Score: <strong id="scoreText"></strong></div>
+            <div class="score-bar"><div class="score-fill" id="scoreFill"></div></div>
+          </div>
+          <div class="reasons-list" id="reasonsList"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <i class="fas fa-search stat-icon blue"></i>
+        <div class="stat-number" id="totalScans">0</div>
+        <div class="stat-label">Total Scans</div>
+      </div>
+      <div class="stat-card">
+        <i class="fas fa-skull-crossbones stat-icon red"></i>
+        <div class="stat-number" id="phishingCount">0</div>
+        <div class="stat-label">Phishing Detected</div>
+      </div>
+      <div class="stat-card">
+        <i class="fas fa-exclamation-triangle stat-icon orange"></i>
+        <div class="stat-number" id="suspiciousCount">0</div>
+        <div class="stat-label">Suspicious</div>
+      </div>
+      <div class="stat-card">
+        <i class="fas fa-check-circle stat-icon green"></i>
+        <div class="stat-number" id="safeCount">0</div>
+        <div class="stat-label">Safe URLs</div>
+      </div>
+    </div>
+
+    <!-- History -->
+    <div class="card">
+      <h2><i class="fas fa-history"></i> Scan History <span class="badge" id="historyCount">0</span></h2>
+      <div id="historyList">
+        <div class="empty-state">
+          <i class="fas fa-inbox"></i>
+          <p>No scans yet. Start by entering a URL above!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phishing Types -->
+    <div class="card">
+      <h2><i class="fas fa-book"></i> Types of Phishing Attacks</h2>
+      <div class="types-grid">
+        <div class="type-item"><div class="type-icon">📧</div><h3>Email Phishing</h3><p>Fake emails mimicking trusted brands to steal credentials</p></div>
+        <div class="type-item"><div class="type-icon">🎯</div><h3>Spear Phishing</h3><p>Targeted attacks using personal information about the victim</p></div>
+        <div class="type-item"><div class="type-icon">📱</div><h3>Smishing</h3><p>SMS-based phishing with fake bank alerts or OTP requests</p></div>
+        <div class="type-item"><div class="type-icon">📞</div><h3>Vishing</h3><p>Voice call phishing posing as bank officers or police</p></div>
+        <div class="type-item"><div class="type-icon">🐋</div><h3>Whaling</h3><p>High-value attacks targeting CEOs and senior executives</p></div>
+        <div class="type-item"><div class="type-icon">🔍</div><h3>Search Engine</h3><p>Fake websites appearing at top of search results via paid ads</p></div>
+        <div class="type-item"><div class="type-icon">🌐</div><h3>Pharming</h3><p>DNS poisoning to redirect users to fake websites</p></div>
+        <div class="type-item"><div class="type-icon">📋</div><h3>Clone Phishing</h3><p>Exact copy of legitimate email with malicious links</p></div>
+      </div>
+    </div>
+
+    <!-- Awareness Tips -->
+    <div class="card">
+      <h2><i class="fas fa-lightbulb"></i> Stay Safe — Awareness Tips</h2>
+      <div class="tips-grid">
+        <div class="tip-item"><i class="fas fa-eye tip-icon"></i><div><h4>Check the URL</h4><p>Verify URL before entering credentials. Look for misspellings like paypa1.com</p></div></div>
+        <div class="tip-item"><i class="fas fa-lock tip-icon"></i><div><h4>Look for HTTPS</h4><p>Always check for the padlock icon. Never enter passwords on HTTP sites.</p></div></div>
+        <div class="tip-item"><i class="fas fa-envelope tip-icon"></i><div><h4>Verify Sender Email</h4><p>Check if email domain matches the company. Fake: support@paypal.verify.com</p></div></div>
+        <div class="tip-item"><i class="fas fa-mobile-alt tip-icon"></i><div><h4>Enable 2FA</h4><p>Two-factor authentication protects account even if password is stolen.</p></div></div>
+        <div class="tip-item"><i class="fas fa-ban tip-icon"></i><div><h4>Never Share OTP</h4><p>No bank ever asks for OTP via phone call or email.</p></div></div>
+        <div class="tip-item"><i class="fas fa-bell tip-icon"></i><div><h4>Report Phishing</h4><p>Report to report@phishing.gov.in or forward to phishing@apwg.org</p></div></div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <p><i class="fas fa-shield-alt"></i> PhishGuard AI | Developed by Shriyash Tambe | HACKADEMIC 2026</p>
+  </footer>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
